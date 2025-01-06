@@ -57,7 +57,8 @@ RES_LOW_PWR_WARNING = 4
 PROG_VER = "v0.1"
 BATTERY_VOLTAGE = 3000 #mV
 CRASH_MSG = "No crash"
-WEIGHTS = [0, 0, 0, 0.2, 0.5, 0.9, 1.5, 2, 3, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+#WEIGHTS = [0, 0, 0, 0.2, 0.5, 0.9, 1.5, 2, 3, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+WEIGHTS = [1.1, 1.0, 1.2, 1.0, 1.0, 1.0, 1.1, 1.1, 1.2, 1.0, 1.1]
 
 def byte_length(n):
     if n == 0:
@@ -80,6 +81,8 @@ class BLESimplePeripheral:
         self._payload_resp = advertising_payload(name = name)
         self._sending_data = False
         self._start_time_us = None
+        self.tare_scale = False
+        self.weight_tare = 0
         self._advertise()
 
     def _irq(self, event, data):
@@ -122,6 +125,8 @@ class BLESimplePeripheral:
             elif value_int == CMD_STOP_WEIGHT_MEAS:
                 self._sending_data = False
                 self._start_time_us = None
+            elif value_int == CMD_TARE_SCALE:
+                self.tare_scale = True
 
     def is_connected(self):
         return len(self._connections) > 0
@@ -139,7 +144,10 @@ class BLESimplePeripheral:
             if self._sending_data and self.is_connected():
                 # Raw values to send
                 elapsed_us = time.ticks_diff(time.ticks_us(), self._start_time_us)  # Calculate elapsed microseconds
-                weight = WEIGHTS[i%len(WEIGHTS)]
+                weight = WEIGHTS[i%len(WEIGHTS)] - self.weight_tare
+                if self.tare_scale:
+                    self.weight_tare = weight
+                    self.tare_scale = False
                 # Values to send
                 weight_data = bytearray(struct.pack('f', weight))
                 elapsed_us_data = bytearray(elapsed_us.to_bytes(4, "little"))
