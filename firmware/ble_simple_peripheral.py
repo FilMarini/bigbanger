@@ -5,6 +5,7 @@ import random
 import struct
 import time
 from ble_advertising import advertising_payload
+import asyncio
 
 from micropython import const
 
@@ -54,6 +55,18 @@ RES_LOW_PWR_WARNING = 4
 
 """Progressor variables"""
 PROG_VER = "v0.1"
+BATTERY_VOLTAGE = 3000 #mV
+CRASH_MSG = "No crash"
+WEIGHTS = [0, 0, 0, 0.2, 0.5, 0.9, 1.5, 2, 3, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+
+def byte_length(n):
+    if n == 0:
+        return 1  # Even 0 requires at least 1 byte
+    bytes_count = 0
+    while n:
+        n >>= 8  # Shift 8 bits (1 byte) at a time
+        bytes_count += 1
+    return bytes_count
 
 class BLESimplePeripheral:
     def __init__(self, ble, name = "Progressor_1234"):
@@ -65,6 +78,8 @@ class BLESimplePeripheral:
         self._write_callback = None
         self._payload = advertising_payload(services=[_PROGRESSOR_SERVICE_UUID])
         self._payload_resp = advertising_payload(name = name)
+        self._sending_data = False
+        self._start_time_us = None
         self._advertise()
 
     def _irq(self, event, data):
@@ -82,21 +97,31 @@ class BLESimplePeripheral:
         elif event == _IRQ_GATTS_WRITE:
             conn_handle, value_handle = data
             value = self._ble.gatts_read(value_handle)
-            #print(f'value = {value}') # b'k' = 107
-            #print(f'value handle = {value_handle}') # 19
-            #print(f'data handle = {self._handle_data}') # 16
-            #print(f'control handle = {self._handle_control}') # 19
             if value_handle == self._handle_control:
-                for conn_handle in self._connections:
-                    if int.from_bytes(value, "big") == CMD_GET_APP_VERSION:
-                        byte_array = bytearray([RES_CMD_RESPONSE, len(PROG_VER)]) + bytearray(PROG_VER.encode('utf-8'))
-                        self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-                        #print("app version data sent")
+                self.process_command(value)
 
-
-    def send(self, data):
+    def process_command(self, value):
+        value_int = int.from_bytes(value, "big")
         for conn_handle in self._connections:
-            self._ble.gatts_notify(conn_handle, self._handle_tx, data)
+            if value_int == CMD_GET_APP_VERSION:
+                size = len(PROG_VER)
+                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(PROG_VER.encode('utf-8'))
+                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
+            elif value_int == CMD_GET_BATTERY_VOLTAGE:
+                pre_size = byte_length(BATTERY_VOLTAGE)
+                size = pre_size if pre_size > 4 else 4
+                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(BATTERY_VOLTAGE.to_bytes(size, "little"))
+                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
+            elif value_int == CMD_GET_ERROR_INFORMATION:
+                size = len(CRASH_MSG)
+                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(CRASH_MSG.encode('utf-8'))
+                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
+            elif value_int == CMD_START_WEIGHT_MEAS:
+                self._sending_data = True
+                self._start_time_us = time.ticks_us()  # Record the start time in microseconds
+            elif value_int == CMD_STOP_WEIGHT_MEAS:
+                self._sending_data = False
+                self._start_time_us = None
 
     def is_connected(self):
         return len(self._connections) > 0
@@ -108,27 +133,39 @@ class BLESimplePeripheral:
     def on_write(self, callback):
         self._write_callback = callback
 
+    async def send_data_loop(self):
+        i = 0
+        while True:
+            if self._sending_data and self.is_connected():
+                # Raw values to send
+                elapsed_us = time.ticks_diff(time.ticks_us(), self._start_time_us)  # Calculate elapsed microseconds
+                weight = WEIGHTS[i%len(WEIGHTS)]
+                # Values to send
+                weight_data = bytearray(struct.pack('f', weight))
+                elapsed_us_data = bytearray(elapsed_us.to_bytes(4, "little"))
+                # Create packet
+                size = 8
+                byte_array = bytearray([RES_WEIGHT_MEAS, size]) + weight_data + elapsed_us_data
+                for conn_handle in self._connections:
+                    data = f"Data {i}, Elapsed: {elapsed_us} µs"
+                    print(f"Sending: {data}")
+                    self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
+                    i += 1
+            await asyncio.sleep(0.2)  # Adjust the interval as needed
 
-def demo():
+
+
+async def demo():
     ble = bluetooth.BLE()
     p = BLESimplePeripheral(ble)
 
-    def on_rx(v):
-        print("RX", v)
+    # Start the data sending loop
+    asyncio.create_task(p.send_data_loop())
 
-    p.on_write(on_rx)
-
-    i = 0
+    # Keep the main loop running
     while True:
-        if p.is_connected():
-            # Short burst of queued notifications.
-            for _ in range(3):
-                data = str(i) + "_"
-                print("TX", data)
-                p.send(data)
-                i += 1
-        time.sleep_ms(100)
+        await asyncio.sleep(1)
 
 
 if __name__ == "__main__":
-    demo()
+    asyncio.run(demo())
