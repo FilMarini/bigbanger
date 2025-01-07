@@ -45,6 +45,7 @@ CMD_GET_ERROR_INFORMATION = 108
 CMD_CLR_ERROR_INFORMATION = 109
 CMD_ENTER_SLEEP = 110
 CMD_GET_BATTERY_VOLTAGE = 111
+CMD_GET_DEVICE_ID = 112
 
 """ Progressor response codes """
 RES_CMD_RESPONSE = 0
@@ -54,8 +55,9 @@ RES_RFD_PEAK_SERIES = 3
 RES_LOW_PWR_WARNING = 4
 
 """Progressor variables"""
-PROG_VER = "v0.1"
+PROG_VER = "1.2.3.4"
 BATTERY_VOLTAGE = 3000 #mV
+DEVICE_ID = 43
 CRASH_MSG = "No crash"
 #WEIGHTS = [0, 0, 0, 0.2, 0.5, 0.9, 1.5, 2, 3, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 WEIGHTS = [1.1, 1.0, 1.2, 1.0, 1.0, 1.0, 1.1, 1.1, 1.2, 1.0, 1.1]
@@ -96,6 +98,7 @@ class BLESimplePeripheral:
             print("Disconnected", conn_handle)
             self._connections.remove(conn_handle)
             # Start advertising again to allow a new connection. Alsways connects when there is an available node.
+            self._sending_data = False
             self._advertise()
         elif event == _IRQ_GATTS_WRITE:
             conn_handle, value_handle = data
@@ -105,6 +108,7 @@ class BLESimplePeripheral:
 
     def process_command(self, value):
         value_int = int.from_bytes(value, "big")
+        print(f'Command {value_int} received!')
         for conn_handle in self._connections:
             if value_int == CMD_GET_APP_VERSION:
                 size = len(PROG_VER)
@@ -114,6 +118,11 @@ class BLESimplePeripheral:
                 pre_size = byte_length(BATTERY_VOLTAGE)
                 size = pre_size if pre_size > 4 else 4
                 byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(BATTERY_VOLTAGE.to_bytes(size, "little"))
+                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
+            elif value_int == CMD_GET_DEVICE_ID:
+                pre_size = byte_length(DEVICE_ID)
+                size = pre_size if pre_size > 8 else 8
+                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(DEVICE_ID.to_bytes(size, "little"))
                 self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
             elif value_int == CMD_GET_ERROR_INFORMATION:
                 size = len(CRASH_MSG)
@@ -134,9 +143,6 @@ class BLESimplePeripheral:
     def _advertise(self, interval_us=500000):
         print("Starting advertising")
         self._ble.gap_advertise(interval_us, adv_data=self._payload, resp_data=self._payload_resp)
-
-    def on_write(self, callback):
-        self._write_callback = callback
 
     async def send_data_loop(self):
         i = 0
