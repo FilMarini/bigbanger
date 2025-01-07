@@ -1,4 +1,14 @@
-# This example demonstrates a UART periperhal.
+"""
+Author: Filippo Marini
+Email: marinifil@gmail.com
+Repository: https://github.com/FilMarini/bigbanger
+License: Apache License, Version 2.0
+Original Source: https://github.com/micropython/micropython
+
+Notes:
+This file is part of an open-source project. Feel free to contribute or report issues on the project's repository.
+
+"""
 
 import bluetooth
 import random

@@ -1,4 +1,6 @@
 (sym_lib_table
   (version 7)
-  (lib (name "MAX16054AZT_T")(type "KiCad")(uri "/home/filippo/sink/esp32/bigbanger/hardware/lib/sym/MAX16054AZT_T.kicad_sym")(options "")(descr ""))
+  (lib (name "LESD5D5.0CT1G")(type "KiCad")(uri "${KIPRJMOD}/../lib/sym/LESD5D5.0CT1G.kicad_sym")(options "")(descr ""))
+  (lib (name "MAX16054AZT_T")(type "KiCad")(uri "${KIPRJMOD}/../lib/sym/MAX16054AZT_T.kicad_sym")(options "")(descr ""))
+  (lib (name "MMBT4403_")(type "KiCad")(uri "${KIPRJMOD}/../lib/sym/MMBT4403_.kicad_sym")(options "")(descr ""))
 )
