@@ -72,7 +72,7 @@ def byte_length(n):
     return bytes_count
 
 class BLESimplePeripheral:
-    def __init__(self, ble, name = "Progressor_1234"):
+    def __init__(self, ble, name = "Progressor_BB"):
         self._ble = ble
         self._ble.active(True)
         self._ble.irq(self._irq)
