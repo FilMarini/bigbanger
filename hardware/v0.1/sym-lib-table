@@ -3,4 +3,5 @@
   (lib (name "LESD5D5.0CT1G")(type "KiCad")(uri "${KIPRJMOD}/../lib/sym/LESD5D5.0CT1G.kicad_sym")(options "")(descr ""))
   (lib (name "MAX16054AZT_T")(type "KiCad")(uri "${KIPRJMOD}/../lib/sym/MAX16054AZT_T.kicad_sym")(options "")(descr ""))
   (lib (name "MMBT4403_")(type "KiCad")(uri "${KIPRJMOD}/../lib/sym/MMBT4403_.kicad_sym")(options "")(descr ""))
+  (lib (name "WE-TPC_2813")(type "KiCad")(uri "${KIPRJMOD}/../lib/sym/WE-TPC_2813.kicad_sym")(options "")(descr ""))
 )

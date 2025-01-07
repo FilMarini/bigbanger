@@ -3277,6 +3277,240 @@
 				)
 			)
 		)
+		(symbol "WE-TPC_2813:WE-TPC_2813"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "L"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Value" "WE-TPC_2813"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Footprint" "WE-TPC_2813:WE-TPC_2813"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "DigiKey_Part_Number" "732-1089-2-ND"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "SnapEDA_Link" "https://www.snapeda.com/parts/744029004/W%25C3%25BCrth+Elektronik+Midcom/view-part/?ref=snap"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "\n                        \n                            Inductors, Fixed, WE-TPC 2813 4.7uH 1A .17Ohm | Wurth Electronics 744029004\n                        \n"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MF" "Würth Elektronik"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Package" "Nonstandard Wurth Electronics"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Check_prices" "https://www.snapeda.com/parts/744029004/W%25C3%25BCrth+Elektronik+Midcom/view-part/?ref=eda"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MP" "744029004"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(symbol "WE-TPC_2813_0_0"
+				(arc
+					(start -2.54 0)
+					(mid -3.81 1.2645)
+					(end -5.08 0)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0)
+					(mid -1.27 1.2645)
+					(end -2.54 0)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 2.54) (xy -5.08 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 1.27 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 2.54 0)
+					(mid 1.27 1.2645)
+					(end 0 0)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 5.08 0)
+					(mid 3.81 1.2645)
+					(end 2.54 0)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:GND"
 			(power)
 			(pin_numbers hide)
@@ -3397,6 +3631,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "419ab781-ef86-477e-89c6-92b691be71d7")
+	)
+	(junction
+		(at 154.94 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4d48edec-b12d-42ea-941f-45c2d7ea3045")
 	)
 	(junction
 		(at 255.27 120.65)
@@ -3563,12 +3803,36 @@
 		(uuid "1beabc3e-dd1f-4583-ba6c-c918bf40ec5c")
 	)
 	(no_connect
+		(at 185.42 66.04)
+		(uuid "4bcd6b06-73bd-436e-8d7e-8309ab4689a7")
+	)
+	(no_connect
+		(at 185.42 40.64)
+		(uuid "69ff7ad4-aca3-4935-b0c2-e8e5d554cde3")
+	)
+	(no_connect
+		(at 185.42 45.72)
+		(uuid "71557972-d2df-4159-a67b-0cfaa6112b1b")
+	)
+	(no_connect
+		(at 185.42 58.42)
+		(uuid "749a4ead-5f93-4976-964a-0308b03050c4")
+	)
+	(no_connect
 		(at 168.91 138.43)
 		(uuid "8b2b492d-ce1d-4402-ae4a-09f15b573792")
 	)
 	(no_connect
 		(at 50.8 123.19)
 		(uuid "92bd2239-eada-4199-9b8f-61a34c9b08bb")
+	)
+	(no_connect
+		(at 185.42 48.26)
+		(uuid "b761618e-d73b-4e48-af95-a5d4724a9a07")
+	)
+	(no_connect
+		(at 185.42 43.18)
+		(uuid "bf498078-8cb3-4503-9542-cdee6e4dd4c1")
 	)
 	(no_connect
 		(at 194.31 128.27)
@@ -3683,16 +3947,6 @@
 			(type default)
 		)
 		(uuid "0c443a1a-c367-402d-9ea0-debf4e58d710")
-	)
-	(wire
-		(pts
-			(xy 36.83 66.04) (xy 29.21 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0f2955cf-302a-4b52-a4e6-6668d589e7b4")
 	)
 	(wire
 		(pts
@@ -3874,6 +4128,16 @@
 		)
 		(uuid "201be1ad-1c28-4c1f-b6de-05f2dae6a360")
 	)
+	(wire
+		(pts
+			(xy 162.56 129.54) (xy 156.21 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20881bd0-f316-458a-bda6-065c8d963d90")
+	)
 	(polyline
 		(pts
 			(xy 114.3 152.4) (xy 114.3 198.12)
@@ -4006,6 +4270,16 @@
 	)
 	(wire
 		(pts
+			(xy 156.21 129.54) (xy 156.21 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "368265d1-b194-48f1-a0d3-980b19feffcc")
+	)
+	(wire
+		(pts
 			(xy 25.4 175.26) (xy 25.4 180.34)
 		)
 		(stroke
@@ -4053,6 +4327,16 @@
 			(type default)
 		)
 		(uuid "3be63c36-44fa-42e5-bd57-d265fb385ad3")
+	)
+	(wire
+		(pts
+			(xy 156.21 130.81) (xy 154.94 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c3bd1f7-926a-4bc2-9e53-1105bd8f66d8")
 	)
 	(wire
 		(pts
@@ -4176,6 +4460,16 @@
 	)
 	(wire
 		(pts
+			(xy 54.61 187.96) (xy 54.61 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "469fbc66-78f3-42b3-952f-fd28c7600a9b")
+	)
+	(wire
+		(pts
 			(xy 43.18 128.27) (xy 43.18 129.54)
 		)
 		(stroke
@@ -4273,6 +4567,26 @@
 			(type default)
 		)
 		(uuid "4e1822ab-2c80-47a8-b9ce-a18ec860bc1e")
+	)
+	(wire
+		(pts
+			(xy 168.91 120.65) (xy 162.56 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e685770-efcb-4f25-b8cb-35014cb268e5")
+	)
+	(wire
+		(pts
+			(xy 48.26 66.04) (xy 53.34 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f13d90a-3e26-47cf-9f59-43f19ed990ec")
 	)
 	(wire
 		(pts
@@ -4666,16 +4980,6 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 66.04) (xy 53.34 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7e161700-ef3b-44a7-93a0-6cdaca15afd3")
-	)
-	(wire
-		(pts
 			(xy 96.52 73.66) (xy 96.52 71.12)
 		)
 		(stroke
@@ -4956,6 +5260,16 @@
 	)
 	(wire
 		(pts
+			(xy 25.4 187.96) (xy 25.4 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a2c4c6a8-6839-4d5c-9099-2604af88a1ad")
+	)
+	(wire
+		(pts
 			(xy 255.27 135.89) (xy 262.89 135.89)
 		)
 		(stroke
@@ -4983,6 +5297,16 @@
 			(type default)
 		)
 		(uuid "a5fc491d-f048-4023-b268-ce668f13f4d4")
+	)
+	(wire
+		(pts
+			(xy 162.56 120.65) (xy 162.56 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6372930-8c87-477a-b1ff-5056cf75053c")
 	)
 	(wire
 		(pts
@@ -5166,6 +5490,16 @@
 	)
 	(wire
 		(pts
+			(xy 29.21 66.04) (xy 33.02 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba13b968-ebf5-4f0f-aa96-4751579daf66")
+	)
+	(wire
+		(pts
 			(xy 154.94 111.76) (xy 154.94 118.11)
 		)
 		(stroke
@@ -5193,6 +5527,16 @@
 			(type default)
 		)
 		(uuid "bd18cc43-6482-461e-af32-3060dbde2114")
+	)
+	(wire
+		(pts
+			(xy 40.64 187.96) (xy 40.64 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be223463-5bcd-4ea6-b538-2b94a3bba502")
 	)
 	(wire
 		(pts
@@ -5933,17 +6277,6 @@
 		(uuid "5f08f650-ee60-4cc9-aa72-d32ab44ff64c")
 	)
 	(label "3V3EN"
-		(at 21.59 163.83 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "608ab599-f23a-4d4f-8693-6228f8e43486")
-	)
-	(label "3V3EN"
 		(at 21.59 77.47 0)
 		(fields_autoplaced yes)
 		(effects
@@ -6052,6 +6385,17 @@
 			(justify left bottom)
 		)
 		(uuid "883593e1-dedc-4b70-8c0f-0b0f4da5f389")
+	)
+	(label "A3V3EN"
+		(at 21.59 163.83 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8a0438bf-4b96-40e6-8a59-a5fcda1cd40e")
 	)
 	(label "A-"
 		(at 156.21 181.61 0)
@@ -6246,7 +6590,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
 			(at 25.4 39.37 0)
 			(effects
 				(font
@@ -6378,7 +6722,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
 			(at 40.64 184.15 0)
 			(effects
 				(font
@@ -6448,7 +6792,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 23.622 171.45 90)
 			(effects
 				(font
@@ -6708,7 +7052,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 153.162 125.73 90)
 			(effects
 				(font
@@ -7398,7 +7742,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 97.282 171.45 90)
 			(effects
 				(font
@@ -7600,7 +7944,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 224.282 44.45 90)
 			(effects
 				(font
@@ -7669,7 +8013,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 131.1148 121.92 0)
 			(effects
 				(font
@@ -7738,7 +8082,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 78.4352 134.62 0)
 			(effects
 				(font
@@ -7808,7 +8152,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 97.4852 81.28 0)
 			(effects
 				(font
@@ -7877,7 +8221,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 137.4648 121.92 0)
 			(effects
 				(font
@@ -7947,7 +8291,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 60.452 87.63 90)
 			(effects
 				(font
@@ -8015,7 +8359,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 172.72 34.5948 0)
 			(effects
 				(font
@@ -8216,7 +8560,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 70.8152 69.85 0)
 			(effects
 				(font
@@ -8441,7 +8785,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 216.662 44.45 90)
 			(effects
 				(font
@@ -8511,7 +8855,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 38.862 171.45 90)
 			(effects
 				(font
@@ -8580,7 +8924,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 254.3048 124.46 0)
 			(effects
 				(font
@@ -8650,7 +8994,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
 			(at 41.91 39.37 0)
 			(effects
 				(font
@@ -8717,7 +9061,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
 			(at 25.4 24.13 0)
 			(effects
 				(font
@@ -8781,7 +9125,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 207.01 104.4448 0)
 			(effects
 				(font
@@ -8850,7 +9194,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 63.1952 69.85 0)
 			(effects
 				(font
@@ -8887,6 +9231,72 @@
 			(project "bb_v0.1"
 				(path "/5d7b0c7d-9df2-4845-8195-c0469bdaa6a5"
 					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 25.4 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7b536e93-ad0d-4d3f-a863-0c34b2e2a190")
+		(property "Reference" "#PWR023"
+			(at 25.4 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 25.4 195.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 25.4 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 25.4 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7d8077ca-b233-4aa2-9fcd-2c930e98f401")
+		)
+		(instances
+			(project "bb_v0.1"
+				(path "/5d7b0c7d-9df2-4845-8195-c0469bdaa6a5"
+					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -9257,7 +9667,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 209.8548 21.59 0)
 			(effects
 				(font
@@ -9326,7 +9736,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 89.8652 134.62 0)
 			(effects
 				(font
@@ -9396,7 +9806,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
 			(at 208.28 138.43 0)
 			(effects
 				(font
@@ -9463,7 +9873,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 165.1 142.5448 0)
 			(effects
 				(font
@@ -9531,7 +9941,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 241.3 137.668 90)
 			(effects
 				(font
@@ -9601,7 +10011,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
 			(at 25.4 184.15 0)
 			(effects
 				(font
@@ -9671,7 +10081,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
 			(at 41.91 24.13 0)
 			(effects
 				(font
@@ -9804,7 +10214,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 60.452 77.47 90)
 			(effects
 				(font
@@ -9940,7 +10350,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 74.422 171.45 90)
 			(effects
 				(font
@@ -10010,7 +10420,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
 			(at 54.61 184.15 0)
 			(effects
 				(font
@@ -10078,7 +10488,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
 			(at 147.32 118.11 0)
 			(effects
 				(font
@@ -10115,6 +10525,145 @@
 			(project "bb_v0.1"
 				(path "/5d7b0c7d-9df2-4845-8195-c0469bdaa6a5"
 					(reference "L2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "WE-TPC_2813:WE-TPC_2813")
+		(at 40.64 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bf5a02ef-ea3d-465c-8da8-80856cccda63")
+		(property "Reference" "L1"
+			(at 40.64 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "WE-TPC_2813"
+			(at 40.64 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "WE-TPC_2813:WE-TPC_2813"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey_Part_Number" "732-1089-2-ND"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/744029004/W%25C3%25BCrth+Elektronik+Midcom/view-part/?ref=snap"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "\n                        \n                            Inductors, Fixed, WE-TPC 2813 4.7uH 1A .17Ohm | Wurth Electronics 744029004\n                        \n"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MF" "Würth Elektronik"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Package" "Nonstandard Wurth Electronics"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/744029004/W%25C3%25BCrth+Elektronik+Midcom/view-part/?ref=eda"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MP" "744029004"
+			(at 40.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9e8594e5-f2d6-45d9-94b7-3b4356e3ff0b")
+		)
+		(pin "1"
+			(uuid "ea1a753c-d65e-474d-8286-cd16600e9b17")
+		)
+		(instances
+			(project ""
+				(path "/5d7b0c7d-9df2-4845-8195-c0469bdaa6a5"
+					(reference "L1")
 					(unit 1)
 				)
 			)
@@ -10268,7 +10817,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 221.2848 21.59 0)
 			(effects
 				(font
@@ -10403,7 +10952,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 177.292 27.94 90)
 			(effects
 				(font
@@ -10539,7 +11088,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 193.802 148.59 90)
 			(effects
 				(font
@@ -10576,6 +11125,72 @@
 			(project "bb_v0.1"
 				(path "/5d7b0c7d-9df2-4845-8195-c0469bdaa6a5"
 					(reference "R13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 40.64 190.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d7821669-fa83-46bc-8539-fc91c13f3db1")
+		(property "Reference" "#PWR024"
+			(at 40.64 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 40.64 195.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 40.64 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 40.64 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "777dfb07-1de4-418b-bac1-28d53f8fb683")
+		)
+		(instances
+			(project "bb_v0.1"
+				(path "/5d7b0c7d-9df2-4845-8195-c0469bdaa6a5"
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)
@@ -10647,25 +11262,26 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:L")
-		(at 40.64 66.04 90)
+		(lib_id "power:GND")
+		(at 54.61 190.5 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "dddb3fca-3788-40ac-b456-0dd57f19dd19")
-		(property "Reference" "L1"
-			(at 40.64 60.96 90)
+		(uuid "de568019-6e38-441c-84d8-b6575ea0765f")
+		(property "Reference" "#PWR025"
+			(at 54.61 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Value" "4u7"
-			(at 40.64 63.5 90)
+		(property "Value" "GND"
+			(at 54.61 195.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10673,7 +11289,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 40.64 66.04 0)
+			(at 54.61 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10681,8 +11297,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 40.64 66.04 0)
+		(property "Datasheet" ""
+			(at 54.61 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10690,25 +11306,22 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Inductor"
-			(at 40.64 66.04 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 54.61 190.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(pin "2"
-			(uuid "f6843bd4-7b0c-4523-84f9-3a31bee7c8f3")
 		)
 		(pin "1"
-			(uuid "4a91613f-e86b-45e8-93eb-bf6028aaf86d")
+			(uuid "20b15b0c-e978-4f69-ac43-227fe7880592")
 		)
 		(instances
-			(project ""
+			(project "bb_v0.1"
 				(path "/5d7b0c7d-9df2-4845-8195-c0469bdaa6a5"
-					(reference "L1")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -10742,7 +11355,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 146.812 137.16 90)
 			(effects
 				(font
@@ -10876,7 +11489,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
 			(at 46.99 119.38 0)
 			(effects
 				(font
@@ -11134,7 +11747,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 241.3 122.428 90)
 			(effects
 				(font
@@ -11204,7 +11817,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 52.832 171.45 90)
 			(effects
 				(font
@@ -11272,7 +11885,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
 			(at 133.35 175.26 0)
 			(effects
 				(font
@@ -11348,7 +11961,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 207.01 109.5248 0)
 			(effects
 				(font
