@@ -1,6 +1,4 @@
 """
-Author: Filippo Marini
-Email: marinifil@gmail.com
 Repository: https://github.com/FilMarini/bigbanger
 License: Apache License, Version 2.0
 Original Source: https://github.com/micropython/micropython
