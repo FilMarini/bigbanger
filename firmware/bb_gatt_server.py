@@ -70,6 +70,9 @@ BATTERY_VOLTAGE = 3000 #mV
 DEVICE_ID = 43
 CRASH_MSG = "No crash"
 
+"""Progressor constants"""
+PROG_SCALE = 20400
+
 def byte_length(n):
     if n == 0:
         return 1  # Even 0 requires at least 1 byte
@@ -97,12 +100,9 @@ class BLEBigBanger:
         # Define driver
         pin_OUT = Pin(6, Pin.IN, pull=Pin.PULL_DOWN)
         pin_SCK = Pin(5, Pin.OUT)
-        #self.driver = HX711(d_out=6, pd_sck=5)
         self.driver = HX711(pin_SCK, pin_OUT)
         self.driver.tare()
-        self.driver.set_scale(20400)
-        self.scaling_factor = 20400
-        self.scale_offset = 218000
+        self.driver.set_scale(PROG_SCALE)
 
     def _irq(self, event, data):
         # Track connections so we can send notifications.
@@ -183,7 +183,6 @@ class BLEBigBanger:
                 size = 8
                 byte_array = bytearray([RES_WEIGHT_MEAS, size]) + weight_data + elapsed_us_data
                 # Send packet
-                #for conn_handle in self._connections:
                 if self.is_connected():
                     self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
             await asyncio.sleep_ms(10)  # 10 Hz, give control back to application
