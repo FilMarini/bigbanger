@@ -96,6 +96,9 @@ class BLEBigBanger:
         self.driver = HX711(d_out=6, pd_sck=5)
         self.scaling_factor = 20400
         self.scale_offset = 218000
+        # Define events for ping-pong
+        self.get_reading_event = asyncio.Event()
+        self.send_ble_event = asyncio.Event()
 
     def _irq(self, event, data):
         # Track connections so we can send notifications.
@@ -156,24 +159,37 @@ class BLEBigBanger:
 
     async def send_data_loop(self):
         while True:
+            await self.send_ble_event.wait()
+            # Raw values to send
+            read_raw = self.driver.read()
+            weight_raw = (read_raw - self.scale_offset) / self.scaling_factor
+            #print((read_raw - self.scale_offset) / self.scaling_factor)
+            weight = weight_raw - self.weight_tare
+            if self.tare_scale:
+                self.weight_tare += weight
+                self.tare_scale = False
+            elapsed_us = time.ticks_diff(time.ticks_us(), self._start_time_us)  # Calculate elapsed microseconds
+            # Values to send
+            weight_data = bytearray(struct.pack('f', weight))
+            elapsed_us_data = bytearray(elapsed_us.to_bytes(4, "little"))
+            # Create packet
+            size = 8
+            byte_array = bytearray([RES_WEIGHT_MEAS, size]) + weight_data + elapsed_us_data
+            # Send packet
+            for conn_handle in self._connections:
+                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
+            self.get_reading_event.set()
+            self.send_ble_event.clear()
+
+    async def read_load_cell(self):
+        while True:
             if self._sending_data and self.is_connected():
-                # Raw values to send
-                elapsed_us = time.ticks_diff(time.ticks_us(), self._start_time_us)  # Calculate elapsed microseconds
-                weight_raw = (self.driver.read() - self.scale_offset) / self.scaling_factor
-                weight = weight_raw - self.weight_tare
-                if self.tare_scale:
-                    self.weight_tare += weight
-                    self.tare_scale = False
-                # Values to send
-                weight_data = bytearray(struct.pack('f', weight))
-                elapsed_us_data = bytearray(elapsed_us.to_bytes(4, "little"))
-                # Create packet
-                size = 8
-                byte_array = bytearray([RES_WEIGHT_MEAS, size]) + weight_data + elapsed_us_data
-                # Send packet
-                for conn_handle in self._connections:
-                    self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-            await asyncio.sleep(0.1)  # 10 Hz, not needed since driver.read() is a blocking command
+                for _ in range(3):
+                    self.read_raw = self.driver.read()
+                    print("{:.1f}".format(abs((self.read_raw - 218000)/20400)))
+                self.send_ble_event.set()
+                self.get_reading_event.clear()
+                await self.get_reading_event.wait()
 
 
 
@@ -182,11 +198,12 @@ async def demo():
     p = BLEBigBanger(ble)
 
     # Start the data sending loop
+    asyncio.create_task(p.read_load_cell())
     asyncio.create_task(p.send_data_loop())
 
     # Keep the main loop running
     while True:
-        await asyncio.sleep(1)
+        await asyncio.sleep(10)
 
 
 if __name__ == "__main__":
