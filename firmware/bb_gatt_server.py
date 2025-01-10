@@ -14,6 +14,7 @@ import struct
 import time
 from ble_advertising import advertising_payload
 import asyncio
+from hx711 import HX711
 
 from micropython import const
 
@@ -67,8 +68,6 @@ PROG_VER = "1.2.3.4"
 BATTERY_VOLTAGE = 3000 #mV
 DEVICE_ID = 43
 CRASH_MSG = "No crash"
-#WEIGHTS = [0, 0, 0, 0.2, 0.5, 0.9, 1.5, 2, 3, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
-WEIGHTS = [1.1, 1.0, 1.2, 1.0, 1.0, 1.0, 1.1, 1.1, 1.2, 1.0, 1.1]
 
 def byte_length(n):
     if n == 0:
@@ -79,7 +78,7 @@ def byte_length(n):
         bytes_count += 1
     return bytes_count
 
-class BLESimplePeripheral:
+class BLEBigBanger:
     def __init__(self, ble, name = "Progressor_BB"):
         self._ble = ble
         self._ble.active(True)
@@ -94,6 +93,9 @@ class BLESimplePeripheral:
         self.tare_scale = False
         self.weight_tare = 0
         self._advertise()
+        self.driver = HX711(d_out=6, pd_sck=5)
+        self.scaling_factor = 20400
+        self.scale_offset = 218000
 
     def _irq(self, event, data):
         # Track connections so we can send notifications.
@@ -153,14 +155,14 @@ class BLESimplePeripheral:
         self._ble.gap_advertise(interval_us, adv_data=self._payload, resp_data=self._payload_resp)
 
     async def send_data_loop(self):
-        i = 0
         while True:
             if self._sending_data and self.is_connected():
                 # Raw values to send
                 elapsed_us = time.ticks_diff(time.ticks_us(), self._start_time_us)  # Calculate elapsed microseconds
-                weight = WEIGHTS[i%len(WEIGHTS)] - self.weight_tare
+                weight_raw = (self.driver.read() - self.scale_offset) / self.scaling_factor
+                weight = weight_raw - self.weight_tare
                 if self.tare_scale:
-                    self.weight_tare = weight
+                    self.weight_tare += weight
                     self.tare_scale = False
                 # Values to send
                 weight_data = bytearray(struct.pack('f', weight))
@@ -168,18 +170,16 @@ class BLESimplePeripheral:
                 # Create packet
                 size = 8
                 byte_array = bytearray([RES_WEIGHT_MEAS, size]) + weight_data + elapsed_us_data
+                # Send packet
                 for conn_handle in self._connections:
-                    data = f"Data {i}, Elapsed: {elapsed_us} µs"
-                    print(f"Sending: {data}")
                     self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-                    i += 1
-            await asyncio.sleep(0.2)  # Adjust the interval as needed
+            await asyncio.sleep(0.1)  # 10 Hz, not needed since driver.read() is a blocking command
 
 
 
 async def demo():
     ble = bluetooth.BLE()
-    p = BLESimplePeripheral(ble)
+    p = BLEBigBanger(ble)
 
     # Start the data sending loop
     asyncio.create_task(p.send_data_loop())

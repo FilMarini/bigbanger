@@ -1,0 +1,3 @@
+[submodule "firmware/micropython-hx711"]
+	path = firmware/micropython_hx711
+	url = https://github.com/SergeyPiskunov/micropython-hx711
