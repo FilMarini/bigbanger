@@ -14,7 +14,8 @@ import struct
 import time
 from ble_advertising import advertising_payload
 import asyncio
-from hx711 import HX711
+from hx711_gpio import HX711
+from machine import Pin
 
 from micropython import const
 
@@ -84,7 +85,7 @@ class BLEBigBanger:
         self._ble.active(True)
         self._ble.irq(self._irq)
         ((self._handle_data, self._handle_control),) = self._ble.gatts_register_services((_PROGRESSOR_SERVICE,))
-        self._connections = set()
+        self._conn_handle = None
         self._write_callback = None
         self._payload = advertising_payload(services=[_PROGRESSOR_SERVICE_UUID])
         self._payload_resp = advertising_payload(name = name)
@@ -93,7 +94,13 @@ class BLEBigBanger:
         self.tare_scale = False
         self.weight_tare = 0
         self._advertise()
-        self.driver = HX711(d_out=6, pd_sck=5)
+        # Define driver
+        pin_OUT = Pin(6, Pin.IN, pull=Pin.PULL_DOWN)
+        pin_SCK = Pin(5, Pin.OUT)
+        #self.driver = HX711(d_out=6, pd_sck=5)
+        self.driver = HX711(pin_SCK, pin_OUT)
+        self.driver.tare()
+        self.driver.set_scale(20400)
         self.scaling_factor = 20400
         self.scale_offset = 218000
 
@@ -101,15 +108,19 @@ class BLEBigBanger:
         # Track connections so we can send notifications.
         if event == _IRQ_CENTRAL_CONNECT:
             conn_handle, _, _ = data
-            print("New connection", conn_handle)
-            self._connections.add(conn_handle)
+            if self._conn_handle is None:  # Only accept the first connection
+                print("New connection", conn_handle)
+                self._conn_handle = conn_handle
+            else:
+                print("Already connected. Ignoring additional connection.")
+                self._ble.gap_disconnect(conn_handle)
         elif event == _IRQ_CENTRAL_DISCONNECT:
             conn_handle, _, _ = data
-            print("Disconnected", conn_handle)
-            self._connections.remove(conn_handle)
-            # Start advertising again to allow a new connection. Alsways connects when there is an available node.
-            self._sending_data = False
-            self._advertise()
+            if conn_handle == self._conn_handle:
+                print("Disconnected", conn_handle)
+                self._conn_handle = None
+                self._sending_data = False
+                self._advertise()
         elif event == _IRQ_GATTS_WRITE:
             conn_handle, value_handle = data
             value = self._ble.gatts_read(value_handle)
@@ -119,36 +130,35 @@ class BLEBigBanger:
     def process_command(self, value):
         value_int = int.from_bytes(value, "big")
         print(f'Command {value_int} received!')
-        for conn_handle in self._connections:
-            if value_int == CMD_GET_APP_VERSION:
-                size = len(PROG_VER)
-                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(PROG_VER.encode('utf-8'))
-                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-            elif value_int == CMD_GET_BATTERY_VOLTAGE:
-                pre_size = byte_length(BATTERY_VOLTAGE)
-                size = pre_size if pre_size > 4 else 4
-                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(BATTERY_VOLTAGE.to_bytes(size, "little"))
-                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-            elif value_int == CMD_GET_DEVICE_ID:
-                pre_size = byte_length(DEVICE_ID)
-                size = pre_size if pre_size > 8 else 8
-                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(DEVICE_ID.to_bytes(size, "little"))
-                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-            elif value_int == CMD_GET_ERROR_INFORMATION:
-                size = len(CRASH_MSG)
-                byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(CRASH_MSG.encode('utf-8'))
-                self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-            elif value_int == CMD_START_WEIGHT_MEAS:
-                self._sending_data = True
-                self._start_time_us = time.ticks_us()  # Record the start time in microseconds
-            elif value_int == CMD_STOP_WEIGHT_MEAS:
-                self._sending_data = False
-                self._start_time_us = None
-            elif value_int == CMD_TARE_SCALE:
-                self.tare_scale = True
+        if value_int == CMD_GET_APP_VERSION:
+            size = len(PROG_VER)
+            byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(PROG_VER.encode('utf-8'))
+            self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
+        elif value_int == CMD_GET_BATTERY_VOLTAGE:
+            pre_size = byte_length(BATTERY_VOLTAGE)
+            size = pre_size if pre_size > 4 else 4
+            byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(BATTERY_VOLTAGE.to_bytes(size, "little"))
+            self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
+        elif value_int == CMD_GET_DEVICE_ID:
+            pre_size = byte_length(DEVICE_ID)
+            size = pre_size if pre_size > 8 else 8
+            byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(DEVICE_ID.to_bytes(size, "little"))
+            self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
+        elif value_int == CMD_GET_ERROR_INFORMATION:
+            size = len(CRASH_MSG)
+            byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(CRASH_MSG.encode('utf-8'))
+            self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
+        elif value_int == CMD_START_WEIGHT_MEAS:
+            self._sending_data = True
+            self._start_time_us = time.ticks_us()  # Record the start time in microseconds
+        elif value_int == CMD_STOP_WEIGHT_MEAS:
+            self._sending_data = False
+            self._start_time_us = None
+        elif value_int == CMD_TARE_SCALE:
+            self.tare_scale = True
 
     def is_connected(self):
-        return len(self._connections) > 0
+        return self._conn_handle is not None
 
     def _advertise(self, interval_us=500000):
         print("Starting advertising")
@@ -156,13 +166,15 @@ class BLEBigBanger:
 
     async def send_data_loop(self):
         while True:
-            if self._sending_data and self.is_connected():
+            if self._sending_data:
                 # Raw values to send
-                elapsed_us = time.ticks_diff(time.ticks_us(), self._start_time_us)  # Calculate elapsed microseconds
-                weight_raw = (self.driver.read() - self.scale_offset) / self.scaling_factor
+                weight_raw = self.driver.get_units()
+                elapsed_us = time.ticks_diff(time.ticks_us(), self._start_time_us)
+                if abs(weight_raw) > 1:
+                    print("{:.1f}".format(abs(weight_raw)))
                 weight = weight_raw - self.weight_tare
                 if self.tare_scale:
-                    self.weight_tare += weight
+                    self.driver.tare()
                     self.tare_scale = False
                 # Values to send
                 weight_data = bytearray(struct.pack('f', weight))
@@ -171,10 +183,10 @@ class BLEBigBanger:
                 size = 8
                 byte_array = bytearray([RES_WEIGHT_MEAS, size]) + weight_data + elapsed_us_data
                 # Send packet
-                for conn_handle in self._connections:
-                    self._ble.gatts_notify(conn_handle, self._handle_data, byte_array)
-            await asyncio.sleep(0.1)  # 10 Hz, not needed since driver.read() is a blocking command
-
+                #for conn_handle in self._connections:
+                if self.is_connected():
+                    self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
+            await asyncio.sleep_ms(10)  # 10 Hz, give control back to application
 
 
 async def demo():
