@@ -71,7 +71,7 @@ DEVICE_ID = 43
 CRASH_MSG = "No crash"
 
 """Progressor constants"""
-PROG_SCALE = 20400
+PROG_SCALE = 32640
 
 def byte_length(n):
     if n == 0:
