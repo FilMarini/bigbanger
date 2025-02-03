@@ -60,3 +60,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
     * Modify the `main.py` file. You need to specify the Bluetooth name for your device (If you want it compatible with the Tindeq Progressor, name must start with `Progressor`) as well as the crane scale used (Supported values are `WH-C07` and `WH-C100`)
 
 7. Start training!
+
+## Acknowledgements
+
+Huge thanks to [Tindeq](https://tindeq.com/product/progressor/) for improving climbing training for all of us with their innovative product and for making their API available to third-party developers, enabling projects like this one. If you find this useful, consider supporting them by getting one of their products—they’re well worth it!
