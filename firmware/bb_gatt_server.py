@@ -1,7 +1,6 @@
 """
 Repository: https://github.com/FilMarini/bigbanger
 License: Apache License, Version 2.0
-Original Source: https://github.com/micropython/micropython
 
 Notes:
 This file is part of an open-source project. Feel free to contribute or report issues on the project's repository.
@@ -71,7 +70,7 @@ DEVICE_ID = 43
 CRASH_MSG = "No crash"
 
 """Progressor constants"""
-PROG_SCALE = 32640
+PROG_SCALE = {'WH-C07': 32640, 'WH-C100': 30682}
 
 def byte_length(n):
     if n == 0:
@@ -83,7 +82,7 @@ def byte_length(n):
     return bytes_count
 
 class BLEBigBanger:
-    def __init__(self, ble, name = "Progressor_BB"):
+    def __init__(self, ble, name = 'Progressor_BB', device = 'WH-C07'):
         self._ble = ble
         self._ble.active(True)
         self._ble.irq(self._irq)
@@ -101,8 +100,11 @@ class BLEBigBanger:
         pin_OUT = Pin(6, Pin.IN, pull=Pin.PULL_DOWN)
         pin_SCK = Pin(5, Pin.OUT)
         self.driver = HX711(pin_SCK, pin_OUT)
+        if device in PROG_SCALE.keys():
+            self.driver.set_scale(PROG_SCALE.get(device))
+        else:
+            self.driver.set_scale(PROG_SCALE.get('WH-C07'))
         self.driver.tare()
-        self.driver.set_scale(PROG_SCALE)
 
     def _irq(self, event, data):
         # Track connections so we can send notifications.
@@ -188,9 +190,9 @@ class BLEBigBanger:
             await asyncio.sleep_ms(10)  # 10 Hz, give control back to application
 
 
-async def demo():
+async def demo(name = 'Progressor_BB', device = 'WH-C07'):
     ble = bluetooth.BLE()
-    p = BLEBigBanger(ble)
+    p = BLEBigBanger(ble, name = name, device = device)
 
     # Start the data sending loop
     asyncio.create_task(p.send_data_loop())
