@@ -12,7 +12,6 @@ import random
 import struct
 import time
 import asyncio
-import logging
 from micropython import const
 from ble_advertising import advertising_payload
 from machine import Pin
@@ -24,9 +23,6 @@ from hx711_bb import *
 
 class BLEBigBanger:
     def __init__(self, ble, name = 'Progressor_BB', device = 'WH-C07'):
-        # Create a logger for this class
-        self.logger = logging.getLogger("BLEBigBanger")
-        self.logger.setLevel(logging.INFO)  # Set logging level (DEBUG, INFO, WARNING, ERROR)
         # Initialize BLE
         self._ble = ble
         self._ble.active(True)
@@ -51,15 +47,15 @@ class BLEBigBanger:
         if event == _IRQ_CENTRAL_CONNECT:
             conn_handle, _, _ = data
             if self._conn_handle is None:  # Only accept the first connection
-                self.logger.debug("New connection", conn_handle)
+                #self.logger.debug("New connection", conn_handle)
                 self._conn_handle = conn_handle
             else:
-                self.logger.warning("Already connected. Ignoring additional connection.")
+                #self.logger.warning("Already connected. Ignoring additional connection.")
                 self._ble.gap_disconnect(conn_handle)
         elif event == _IRQ_CENTRAL_DISCONNECT:
             conn_handle, _, _ = data
             if conn_handle == self._conn_handle:
-                self.logger.debug("Disconnected", conn_handle)
+                #self.logger.debug("Disconnected", conn_handle)
                 self._conn_handle = None
                 self._sending_data = False
                 self._advertise()
@@ -72,7 +68,7 @@ class BLEBigBanger:
     def process_command(self, value):
         """Define BLE commands and responses"""
         value_int = int.from_bytes(value, "big")
-        self.logger.debug(f'Command {value_int} received!')
+        #self.logger.debug(f'Command {value_int} received!')
         if value_int == CMD_GET_APP_VERSION:
             size = len(PROG_VER)
             byte_array = bytearray([RES_CMD_RESPONSE, size]) + bytearray(PROG_VER.encode('utf-8'))
@@ -106,7 +102,7 @@ class BLEBigBanger:
 
     def _advertise(self, interval_us=500000):
         """Start BLE advertising if not connected"""
-        self.logger.debug("Starting advertising")
+        #self.logger.debug("Starting advertising")
         self._ble.gap_advertise(interval_us, adv_data=self._payload, resp_data=self._payload_resp)
 
     async def send_data_loop(self):

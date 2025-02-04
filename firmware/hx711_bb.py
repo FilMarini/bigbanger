@@ -18,17 +18,17 @@ class HX711BB(HX711):
         super().__init__(**kwargs)
         # Set scale
         if device in PROG_SCALE.keys():
-            self.driver.set_scale(PROG_SCALE.get(device))
+            self.set_scale(PROG_SCALE.get(device))
         else:
-            self.driver.set_scale(PROG_SCALE.get('WH-C07'))
+            self.set_scale(PROG_SCALE.get('WH-C07'))
         # Tare
-        self.driver.tare()
+        self.tare()
         # Vars
-        self._start_time_us = start_time
+        self._start_time_us = start_time_us
 
     def get_ble_units(self):
         """Read weigth with user tare and scale and convert it to bytearray for BLE"""
-        weight_raw = self.driver.get_units()
+        weight_raw = self.get_units()
         weight_data = bytearray(struct.pack('f', weight_raw))
         return weight_data
 
@@ -46,5 +46,5 @@ class HX711BB(HX711):
 
     def set_start_time(self, new_time):
         """Sets start_time to a specific value."""
-        self.start_time = new_time
+        self._start_time_us = new_time
 
