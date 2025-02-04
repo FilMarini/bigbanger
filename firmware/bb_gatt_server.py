@@ -27,10 +27,10 @@ class BLEBigBanger:
         self._ble = ble
         self._ble.active(True)
         self._ble.irq(self._irq)
-        ((self._handle_data, self._handle_control),) = self._ble.gatts_register_services((_PROGRESSOR_SERVICE,))
+        ((self._handle_data, self._handle_control),) = self._ble.gatts_register_services((PROGRESSOR_SERVICE,))
         self._conn_handle = None
         self._write_callback = None
-        self._payload = advertising_payload(services=[_PROGRESSOR_SERVICE_UUID])
+        self._payload = advertising_payload(services=[PROGRESSOR_SERVICE_UUID])
         self._payload_resp = advertising_payload(name = name)
         # Initialize flags
         self._sending_data = False
@@ -44,7 +44,7 @@ class BLEBigBanger:
     def _irq(self, event, data):
         """BLE connection manager"""
         # Track connections so we can send notifications.
-        if event == _IRQ_CENTRAL_CONNECT:
+        if event == IRQ_CENTRAL_CONNECT:
             conn_handle, _, _ = data
             if self._conn_handle is None:  # Only accept the first connection
                 #self.logger.debug("New connection", conn_handle)
@@ -52,20 +52,20 @@ class BLEBigBanger:
             else:
                 #self.logger.warning("Already connected. Ignoring additional connection.")
                 self._ble.gap_disconnect(conn_handle)
-        elif event == _IRQ_CENTRAL_DISCONNECT:
+        elif event == IRQ_CENTRAL_DISCONNECT:
             conn_handle, _, _ = data
             if conn_handle == self._conn_handle:
                 #self.logger.debug("Disconnected", conn_handle)
                 self._conn_handle = None
                 self._sending_data = False
                 self._advertise()
-        elif event == _IRQ_GATTS_WRITE:
+        elif event == IRQ_GATTS_WRITE:
             conn_handle, value_handle = data
             value = self._ble.gatts_read(value_handle)
             if value_handle == self._handle_control:
-                self.process_command(value)
+                self._process_command(value)
 
-    def process_command(self, value):
+    def _process_command(self, value):
         """Define BLE commands and responses"""
         value_int = int.from_bytes(value, "big")
         #self.logger.debug(f'Command {value_int} received!')

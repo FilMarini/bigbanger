@@ -11,18 +11,18 @@ import bluetooth
 from micropython import const
 
 """ Event IDs """
-_IRQ_CENTRAL_CONNECT = const(1)
-_IRQ_CENTRAL_DISCONNECT = const(2)
-_IRQ_GATTS_WRITE = const(3)
+IRQ_CENTRAL_CONNECT = const(1)
+IRQ_CENTRAL_DISCONNECT = const(2)
+IRQ_GATTS_WRITE = const(3)
 
-""" Progressor Flags """
+""" BLE Flags """
 _FLAG_READ = const(0x0002)
 _FLAG_WRITE_NO_RESPONSE = const(0x0004)
 _FLAG_WRITE = const(0x0008)
 _FLAG_NOTIFY = const(0x0010)
 
 """ Progressor UUIDs """
-_PROGRESSOR_SERVICE_UUID = bluetooth.UUID("7e4e1701-1ea6-40c9-9dcc-13d34ffead57")
+PROGRESSOR_SERVICE_UUID = bluetooth.UUID("7e4e1701-1ea6-40c9-9dcc-13d34ffead57")
 _PROGRESSOR_DATA_CHAR = (
     bluetooth.UUID("7e4e1702-1ea6-40c9-9dcc-13d34ffead57"),
     _FLAG_READ | _FLAG_NOTIFY,
@@ -31,8 +31,8 @@ _PROGRESSOR_CONTROL_POINT = (
     bluetooth.UUID("7e4e1703-1ea6-40c9-9dcc-13d34ffead57"),
     _FLAG_WRITE | _FLAG_WRITE_NO_RESPONSE,
 )
-_PROGRESSOR_SERVICE = (
-    _PROGRESSOR_SERVICE_UUID,
+PROGRESSOR_SERVICE = (
+    PROGRESSOR_SERVICE_UUID,
     (_PROGRESSOR_DATA_CHAR, _PROGRESSOR_CONTROL_POINT),
 )
 
