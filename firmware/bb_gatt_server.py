@@ -15,6 +15,7 @@ from ble_advertising import advertising_payload
 import asyncio
 from hx711_gpio import HX711
 from machine import Pin
+import esp32
 
 from micropython import const
 
@@ -81,6 +82,10 @@ def byte_length(n):
         bytes_count += 1
     return bytes_count
 
+def button_callback(pin):
+    global button_pressed
+    button_pressed = True
+
 class BLEBigBanger:
     def __init__(self, ble, name = 'Progressor_BB', device = 'WH-C07'):
         self._ble = ble
@@ -100,10 +105,16 @@ class BLEBigBanger:
         pin_OUT = Pin(6, Pin.IN, pull=Pin.PULL_DOWN)
         pin_SCK = Pin(5, Pin.OUT)
         self.driver = HX711(pin_SCK, pin_OUT)
-        if device in PROG_SCALE.keys():
-            self.driver.set_scale(PROG_SCALE.get(device))
-        else:
-            self.driver.set_scale(PROG_SCALE.get('WH-C07'))
+        # Tare procedure
+        nvs = esp32.NVS("storage")
+        try:
+            scale_value = int(nvs.get_i32("tare")/5)
+            self.driver.set_scale(scale_value)
+        except:
+            if device in PROG_SCALE.keys():
+                self.driver.set_scale(PROG_SCALE.get(device))
+            else:
+                self.driver.set_scale(PROG_SCALE.get('WH-C07'))
         self.driver.tare()
 
     def _irq(self, event, data):
@@ -189,18 +200,43 @@ class BLEBigBanger:
                     self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
             await asyncio.sleep_ms(10)  # 10 Hz, give control back to application
 
-
 async def demo(name = 'Progressor_BB', device = 'WH-C07'):
-    ble = bluetooth.BLE()
-    p = BLEBigBanger(ble, name = name, device = device)
-
-    # Start the data sending loop
-    asyncio.create_task(p.send_data_loop())
-
-    # Keep the main loop running
-    while True:
-        await asyncio.sleep(1)
-
+    # Define tare mode pin
+    tare_pin = Pin(9, Pin.IN)
+    led_pin = Pin(4, Pin.OUT)
+    led_pin.value(0)
+    # Check is tare is pressed. If so, go into tare mode
+    if tare_pin.value() == 1:
+        ble = bluetooth.BLE()
+        p = BLEBigBanger(ble, name = name, device = device)
+        # Start the data sending loop
+        asyncio.create_task(p.send_data_loop())
+        # Keep the main loop running
+        while True:
+            await asyncio.sleep(1)
+    else:
+        # Go into tare mode
+        led_pin.value(1)
+        while tare_pin.value() == 0:
+            time.sleep(0.1)
+        # Define a flag to indicate a button press
+        global button_pressed
+        button_pressed = False
+        # Set scale
+        pin_OUT = Pin(6, Pin.IN, pull=Pin.PULL_DOWN)
+        pin_SCK = Pin(5, Pin.OUT)
+        driver = HX711(pin_SCK, pin_OUT)
+        driver.tare()
+        # Attach interrupt with a lambda function
+        tare_pin.irq(trigger=Pin.IRQ_FALLING, handler=button_callback)
+        # Wait for the button to be pressed
+        while not button_pressed:
+            time.sleep(0.1)  # Small delay to reduce CPU usage
+        # Get load cell value with 5 kg on
+        registered_value = driver.read()
+        nvs = esp32.NVS("storage")
+        nvs.set_i32("tare", registered_value)
+        nvs.commit()
 
 if __name__ == "__main__":
     asyncio.run(demo())
