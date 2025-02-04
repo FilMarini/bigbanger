@@ -218,7 +218,7 @@ async def demo(name = 'Progressor_BB', device = 'WH-C07'):
         # Go into tare mode
         led_pin.value(1)
         while tare_pin.value() == 0:
-            time.sleep(0.1)
+            await asyncio.sleep(0.1)
         # Define a flag to indicate a button press
         global button_pressed
         button_pressed = False
@@ -231,7 +231,7 @@ async def demo(name = 'Progressor_BB', device = 'WH-C07'):
         tare_pin.irq(trigger=Pin.IRQ_FALLING, handler=button_callback)
         # Wait for the button to be pressed
         while not button_pressed:
-            time.sleep(0.1)  # Small delay to reduce CPU usage
+            await asyncio.sleep(0.1)  # Small delay to reduce CPU usage
         # Get load cell value with 5 kg on
         registered_value = driver.read()
         nvs = esp32.NVS("storage")
