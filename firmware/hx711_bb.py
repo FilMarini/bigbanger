@@ -8,6 +8,7 @@ This file is part of an open-source project. Feel free to contribute or report i
 """
 
 import time
+import struct
 from hx711_gpio import HX711
 
 # User imports

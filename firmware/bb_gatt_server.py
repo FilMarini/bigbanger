@@ -92,7 +92,7 @@ class BLEBigBanger:
             self.driver.set_start_time(time.ticks_us())  # Record the start time in microseconds
         elif value_int == CMD_STOP_WEIGHT_MEAS:
             self._sending_data = False
-            self.driver.set_start_time_us(None)
+            self.driver.set_start_time(None)
         elif value_int == CMD_TARE_SCALE:
             self._tare_scale = True
 
