@@ -8,7 +8,6 @@ This file is part of an open-source project. Feel free to contribute or report i
 """
 
 import bluetooth
-import random
 import struct
 import time
 import asyncio
@@ -22,7 +21,7 @@ from utils import *
 from hx711_bb import *
 
 class BLEBigBanger:
-    def __init__(self, ble, name = 'Progressor_BB', device = 'WH-C07'):
+    def __init__(self, ble, dataPin, clkPin, name = 'Progressor_BB', device = 'WH-C07'):
         # Initialize BLE
         self._ble = ble
         self._ble.active(True)
@@ -37,9 +36,7 @@ class BLEBigBanger:
         self._tare_scale = False
         self._advertise()
         # Define HX711 driver
-        pin_OUT = Pin(6, Pin.IN, pull=Pin.PULL_DOWN)
-        pin_SCK = Pin(5, Pin.OUT)
-        self.driver = HX711BB(clock = pin_SCK, data = pin_OUT, device = device)
+        self.driver = HX711BB(clock = clkPin, data = dataPin, device = device)
 
     def _irq(self, event, data):
         """BLE connection manager"""
@@ -119,19 +116,3 @@ class BLEBigBanger:
                 if self.is_connected():
                     self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
             await asyncio.sleep_ms(10)  # 100 Hz, Ok for 80 Hz of HX711
-
-
-async def demo(name = 'Progressor_BB', device = 'WH-C07'):
-    ble = bluetooth.BLE()
-    p = BLEBigBanger(ble, name = name, device = device)
-
-    # Start the data sending loop
-    asyncio.create_task(p.send_data_loop())
-
-    # Keep the main loop running
-    while True:
-        await asyncio.sleep(1)
-
-
-if __name__ == "__main__":
-    asyncio.run(demo())

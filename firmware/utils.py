@@ -15,4 +15,3 @@ def byte_length(n):
         n >>= 8  # Shift 8 bits (1 byte) at a time
         bytes_count += 1
     return bytes_count
-
