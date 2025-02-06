@@ -48,7 +48,7 @@ async def BigBanger(name = 'Progressor_BB', device = 'WH-C07'):
         # Attach interrupt with a lambda function
         tarePin.irq(trigger=Pin.IRQ_FALLING, handler=lambda p: button_pressed.update(state = True))
         # Wait for the button to be pressed
-        while not button_pressed:
+        while not button_pressed["state"]:
             await asyncio.sleep(0.1)
         # Calibrate with 5 kg on
         driver.calibrate()
