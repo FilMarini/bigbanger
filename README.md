@@ -29,17 +29,19 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 * [esptool](https://docs.espressif.com/projects/esptool/en/latest/esp32/index.html)
 
+* [rshell](https://github.com/dhylands/rshell)
+
 ## How-to
 
 1. Build the PCB from the Kicad project. Design is fully compliant with [JLCPCB rules](https://jlcpcb.com/capabilities/pcb-capabilities)
 
     * The JLCPCB gerbers and assembly files are available in the [release page](https://github.com/FilMarini/bigbanger/releases/tag/v1.0)
 
-    * If you assemble the PCB with JLCPCB, go to step 4
+    * If you assemble the PCB with JLCPCB, go to step 3
 
-3. Buy the components. [Here](https://www.digikey.it/it/mylists/list/KCSV7UEBPS) is a full Digikey list of parts
+2. Buy the components. [Here](https://www.digikey.it/it/mylists/list/KCSV7UEBPS) is a full Digikey list of parts
 
-4. Get to soldering!
+3. Get to soldering!
 
     Battery wiring:
     
@@ -53,15 +55,28 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
     * A+: Green
     * E+: Red
 
-5. Turn on the board and connect to PC
+4. Turn on the BigBanger and connect to PC using the microUSB
+
+    * Device should appear as `/dev/ttyACM*` or `/dev/ttyUSB*`
+
 
 6. Flash the ESP32 micropython firmware. Instructions and firmware files are [here](https://micropython.org/download/ESP32_GENERIC_C3/)
 
 7. Copy the `.py` files in the 'firmware' folder into the ESP32. Copy the `hx711_gpio.py` file into the ESP32. For this you can use [rshell](https://github.com/dhylands/rshell)
 
-    * Modify the `main.py` file. You need to specify the Bluetooth name for your device (If you want it compatible with the Tindeq Progressor, name must start with `Progressor`) as well as the crane scale used (Supported values are `WH-C07` and `WH-C100`)
+   * Modify the `main.py` file. You need to specify the Bluetooth name for your device (If you want it compatible with the Tindeq Progressor, name must start with `Progressor`) as well as the crane scale used (Supported values are `WH-C07` and `WH-C100`)
 
-8. Start training!
+    * With [rshell](https://github.com/dhylands/rshell):
+    
+       ```bash
+       git clone --recursive https://github.com/FilMarini/bigbanger.git
+       cd bigbanger/firmware
+       rshell -p /dev/ttyACM0 cp bb_gatt_server.py ble_advertising.py config.py hx711_bb.py utils.py hx711/hx711_gpio.py main.py /pyboard # Probably requires sudo privileges
+       ```
+
+    
+
+9. Start training!
 
 ## Acknowledgements
 
