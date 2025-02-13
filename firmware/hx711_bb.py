@@ -34,8 +34,6 @@ class HX711BB(HX711):
         self.tare()
         # Vars
         self._start_time_us = start_time_us
-        # Do a reading in case we are in tare mode
-        self._no_weight_read = self.read()
 
     def get_ble_units(self):
         """Read weigth with user tare and scale and convert it to bytearray for BLE"""
@@ -59,10 +57,19 @@ class HX711BB(HX711):
         """Sets start_time to a specific value."""
         self._start_time_us = new_time
 
-    def calibrate(self):
-        "Calibrate scale with a 5 kg weight"
-        self._cal_value = int((self.read() - self._no_weight_read) / 5)
-        nvs = esp32.NVS("storage")
-        nvs.set_i32("tare", self._cal_value)
-        nvs.commit()
+    def calibrate(self, init=False):
+        """Calibrate scale with a 10 kg weight"""
+        if init:
+            # Do a first reading in case we are in tare mode
+            self._no_weight_read = self.read()
+        else:
+            # Do the reading to calculate scale
+            self._cal_value = int((self.read() - self._no_weight_read) / 10)
+            # Set scale
+            self.set_scale(self._cal_value)
+            self.tare()
+            # And save it
+            nvs = esp32.NVS("storage")
+            nvs.set_i32("tare", self._cal_value)
+            nvs.commit()
 

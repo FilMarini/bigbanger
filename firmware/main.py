@@ -23,35 +23,20 @@ async def BigBanger(name = 'Progressor_BB', device = 'WH-C07'):
     ledPin = Pin(4, Pin.OUT)
     tarePin = Pin(9, Pin.IN)
 
-    # Check if tarePin is pressed
-    if tarePin.value():
-        # BigBanger BLE
-        ble = bluetooth.BLE()
-        p = BLEBigBanger(ble, dataPin = dataPin, clkPin = clkPin, name = name, device = device)
+    # BLE
+    ble = bluetooth.BLE()
+    p = BLEBigBanger(
+        ble,
+        dataPin = dataPin,
+        clkPin = clkPin,
+        tarePin = tarePin,
+        ledPin = ledPin,
+        name = name,
+        device = device)
 
-        # Start the data sending loop
-        asyncio.create_task(p.send_data_loop())
-
-        # Keep the main loop running
-        while True:
-            await asyncio.sleep(1)
-    else:
-        # Turn on LED
-        ledPin.value(1)
-        # Wait until tarePin is released
-        while tarePin.value() == 0:
-            await asyncio.sleep(0.1)
-        # Define a flag to indicate if button is pressed
-        button_pressed = {"state": False}
-        # Define driver
-        driver = HX711BB(clock = clkPin, data = dataPin, device = device)
-        # Attach interrupt with a lambda function
-        tarePin.irq(trigger=Pin.IRQ_FALLING, handler=lambda p: button_pressed.update(state = True))
-        # Wait for the button to be pressed
-        while not button_pressed["state"]:
-            await asyncio.sleep(0.1)
-        # Calibrate with 5 kg on
-        driver.calibrate()
+    # Keep the main loop running
+    while True:
+        await asyncio.sleep(1)
 
 asyncio.run(BigBanger(
     name = 'Progressor_BB', # Bluetooth advertising name, must start with "Progressor"
