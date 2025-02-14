@@ -113,7 +113,6 @@ class BLEBigBanger:
     async def send_data_loop(self):
         """Send weight data over BLE"""
         while True:
-            await asyncio.sleep(1)
             if self._sending_data:
                 # Tare scale if tare command is received from the app
                 if self._tare_scale:
