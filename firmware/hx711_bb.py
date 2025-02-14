@@ -23,7 +23,7 @@ class HX711BB(HX711):
         # Check is the tare procedure has run in the past
         try:
             scale_value = nvs.get_i32("tare")
-            self.driver.set_scale(scale_value)
+            self.set_scale(scale_value)
         except:
             # Check if device is in device table
             if device in PROG_SCALE.keys():
