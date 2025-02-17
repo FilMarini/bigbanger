@@ -147,7 +147,7 @@ class BLEBigBanger:
                 # Wait for the button to be pressed
                 while not button_pressed["state"]:
                     time.sleep(0.1)
-                # Calibrate with 5 kg on
+                # Calibrate with 10 kg on
                 self.driver.calibrate()
                 # Restore normal mode
                 time.sleep(1)
