@@ -67,7 +67,6 @@ class HX711BB(HX711):
             self._cal_value = int((self.read() - self._no_weight_read) / 10)
             # Set scale
             self.set_scale(self._cal_value)
-            self.tare()
             # And save it
             nvs = esp32.NVS("storage")
             nvs.set_i32("tare", self._cal_value)
