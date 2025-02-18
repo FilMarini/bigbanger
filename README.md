@@ -78,6 +78,24 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 9. Start training!
 
+## Calibration
+
+The BigBanger scale comes pre-calibrated, but if for any reason the calibration is lost, you can recalibrate it using the built-in two-point calibration system. This system requires two weight measurements with a 10 kg difference—typically one at zero weight and another at 10 kg.
+
+### How to calibrate
+
+- Turn on the BigBanger scale and ensure it is disconnected from any device.
+
+- Press and hold the Unit button until the LED D5 turns on (this takes a few seconds).
+
+- When the LED turns on, the scale performs the first measurement (normally at zero weight).
+
+- Add 10 kg weight on the scale.
+
+- Press the Unit button again. The LED D5 should turn off.
+
+- The scale is now calibrated and you can now connect to it.
+
 ## Acknowledgements
 
 Huge thanks to [Tindeq](https://tindeq.com/product/progressor/) for improving climbing training for all of us with their innovative product and for making their API available to third-party developers, enabling projects like this one. If you find this useful, consider supporting them by getting one of their products—they’re well worth it!

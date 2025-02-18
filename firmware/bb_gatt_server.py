@@ -8,7 +8,6 @@ This file is part of an open-source project. Feel free to contribute or report i
 """
 
 import bluetooth
-import random
 import struct
 import time
 import asyncio
@@ -22,7 +21,12 @@ from utils import *
 from hx711_bb import *
 
 class BLEBigBanger:
-    def __init__(self, ble, name = 'Progressor_BB', device = 'WH-C07'):
+    def __init__(self, ble, dataPin, clkPin, tarePin, ledPin, name = 'Progressor_BB', device = 'WH-C07'):
+        # Set pins
+        self._dataPin = dataPin
+        self._clkPin = clkPin
+        self._tarePin = tarePin
+        self._ledPin = ledPin
         # Initialize BLE
         self._ble = ble
         self._ble.active(True)
@@ -37,9 +41,10 @@ class BLEBigBanger:
         self._tare_scale = False
         self._advertise()
         # Define HX711 driver
-        pin_OUT = Pin(6, Pin.IN, pull=Pin.PULL_DOWN)
-        pin_SCK = Pin(5, Pin.OUT)
-        self.driver = HX711BB(clock = pin_SCK, data = pin_OUT, device = device)
+        self.driver = HX711BB(clock = self._clkPin, data = self._dataPin, device = device)
+        # Start the loops
+        self.normal_mode_task = asyncio.create_task(self.send_data_loop())
+        self.tare_mode_task = asyncio.create_task(self.tare_mode())
 
     def _irq(self, event, data):
         """BLE connection manager"""
@@ -102,7 +107,7 @@ class BLEBigBanger:
 
     def _advertise(self, interval_us=500000):
         """Start BLE advertising if not connected"""
-        #self.logger.debug("Starting advertising")
+        print("Starting advertising")
         self._ble.gap_advertise(interval_us, adv_data=self._payload, resp_data=self._payload_resp)
 
     async def send_data_loop(self):
@@ -120,18 +125,31 @@ class BLEBigBanger:
                     self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
             await asyncio.sleep_ms(10)  # 100 Hz, Ok for 80 Hz of HX711
 
-
-async def demo(name = 'Progressor_BB', device = 'WH-C07'):
-    ble = bluetooth.BLE()
-    p = BLEBigBanger(ble, name = name, device = device)
-
-    # Start the data sending loop
-    asyncio.create_task(p.send_data_loop())
-
-    # Keep the main loop running
-    while True:
-        await asyncio.sleep(1)
-
-
-if __name__ == "__main__":
-    asyncio.run(demo())
+    async def tare_mode(self):
+        while True:
+            check_tare = asyncio.create_task(check4sec(1, self._tarePin))
+            in_tare_mode = await check_tare
+            if in_tare_mode:
+                # Turn on tare mode LED and reset flags
+                self._sending_data = False
+                self._ledPin.value(1)
+                # Wait until tarePin is released
+                while self._tarePin.value() == 0:
+                    time.sleep(0.1)
+                # Cancel tasks that are no more needed
+                check_tare.cancel()
+                # Define a flag to indicate if button is pressed
+                button_pressed = {"state": False}
+                # Define driver
+                self.driver.calibrate(init=True)
+                # Attach interrupt with a lambda function
+                self._tarePin.irq(trigger=Pin.IRQ_FALLING, handler=lambda p: button_pressed.update(state = True))
+                # Wait for the button to be pressed
+                while not button_pressed["state"]:
+                    time.sleep(0.1)
+                # Calibrate with 10 kg on
+                self.driver.calibrate()
+                # Restore normal mode
+                time.sleep(1)
+                self._ledPin.value(0)
+            await asyncio.sleep(0.1)
