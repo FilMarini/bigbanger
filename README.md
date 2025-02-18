@@ -94,7 +94,7 @@ The BigBanger scale comes pre-calibrated, but if for any reason the calibration 
 
 - Press the Unit button again. The LED D5 should turn off.
 
-- The scale is now calibrated.
+- The scale is now calibrated and you can now connect to it.
 
 ## Acknowledgements
 
