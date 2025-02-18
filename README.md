@@ -35,7 +35,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 1. Build the PCB from the Kicad project. Design is fully compliant with [JLCPCB rules](https://jlcpcb.com/capabilities/pcb-capabilities)
 
-    * The JLCPCB gerbers and assembly files are available in the [release page](https://github.com/FilMarini/bigbanger/releases/tag/v1.0)
+    * The JLCPCB gerbers and assembly files are available in the [release page](https://github.com/FilMarini/bigbanger/releases/tag/v1.1)
 
     * If you assemble the PCB with JLCPCB, go to step 3
 
