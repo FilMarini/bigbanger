@@ -38,7 +38,6 @@ class BLEBigBanger:
         self._payload_resp = advertising_payload(name = name)
         # Initialize flags
         self._sending_data = False
-        self._tare_scale = False
         self._advertise()
         # Define HX711 driver
         self.driver = HX711BB(clock = self._clkPin, data = self._dataPin, device = device)
@@ -99,7 +98,7 @@ class BLEBigBanger:
             self._sending_data = False
             self.driver.set_start_time(None)
         elif value_int == CMD_TARE_SCALE:
-            self._tare_scale = True
+            self.driver.tare()
 
     def is_connected(self):
         """Is the BigBanger connected?"""
@@ -114,10 +113,6 @@ class BLEBigBanger:
         """Send weight data over BLE"""
         while True:
             if self._sending_data:
-                # Tare scale if tare command is received from the app
-                if self._tare_scale:
-                    self.driver.tare()
-                    self._tare_scale = False
                 # Get weight measurement
                 byte_array = self.driver.get_ble_pkt()
                 # Send packet
