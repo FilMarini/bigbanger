@@ -38,6 +38,7 @@ class BLEBigBanger:
         self._payload_resp = advertising_payload(name = name)
         # Initialize flags
         self._sending_data = False
+        self._tare = False
         self._advertise()
         # Define HX711 driver
         self.driver = HX711BB(clock = self._clkPin, data = self._dataPin, device = device)
@@ -98,7 +99,8 @@ class BLEBigBanger:
             self._sending_data = False
             self.driver.set_start_time(None)
         elif value_int == CMD_TARE_SCALE:
-            self.driver.tare()
+            # Workaround to tare since calling tare() directly does not work for some reason
+            self._tare = True
 
     def is_connected(self):
         """Is the BigBanger connected?"""
@@ -118,6 +120,9 @@ class BLEBigBanger:
                 # Send packet
                 if self.is_connected():
                     self._ble.gatts_notify(self._conn_handle, self._handle_data, byte_array)
+            if self._tare:
+                self.driver.tare()
+                self._tare = False
             await asyncio.sleep_ms(10)  # 100 Hz, Ok for 80 Hz of HX711
 
     async def tare_mode(self):
