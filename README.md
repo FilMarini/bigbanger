@@ -1,7 +1,7 @@
 # BigBanger :boom:
 
 <p align="center">
-  <img src ="doc/bb.png" width="400" alt="BigBanger v1.0">
+  <img src ="doc/better_bb.jpg" width="450" alt="BigBanger v1.0">
 </p>
 
 BigBanger is an ESP32-based open-source project that combines firmware and hardware to create a Bluetooth-enabled scale, mainly designed for climbing training.
