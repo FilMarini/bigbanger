@@ -1,3 +1,3 @@
-[submodule "firmware/hx711"]
-	path = firmware/hx711
+[submodule "firmware/upython/hx711"]
+	path = firmware/upython/hx711
 	url = https://github.com/robert-hh/hx711.git
