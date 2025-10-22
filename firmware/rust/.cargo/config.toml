@@ -1,0 +1,39 @@
+[build]
+target = "riscv32imc-unknown-none-elf"
+
+[target.'cfg(target_arch = "riscv32")']
+runner    = "espflash flash --monitor"
+rustflags = [
+  "-C", "link-arg=-Tlinkall.x",
+  "-C", "force-frame-pointers",
+]
+
+[target.'cfg(target_arch = "xtensa")']
+runner    = "espflash flash --monitor"
+rustflags = [
+  # GNU LD
+  "-C", "link-arg=-Wl,-Tlinkall.x",
+  "-C", "link-arg=-nostartfiles",
+
+  # LLD
+  # "-C", "link-arg=-Tlinkall.x",
+  # "-C", "linker=rust-lld",
+]
+
+[env]
+ESP_LOG = "info"
+# Progressor advertise name
+PROGRESSOR_NAME = "Progressor_1"
+# App version
+APP_VERSION = "1.2.3"
+# Device ID
+DEVICE_ID = "42"
+# Default calibration value in case of checksum mismatch
+DEFAULT_CALIB_VALUE = "0.0000625"
+# Time to wait in ms before entering calibration mode
+TIME_TO_CALIBRATION = "2000"
+# Fake battery voltage in mV
+FAKE_BATTERY_VOLTAGE = "3000"
+
+[unstable]
+build-std = ["core", "alloc"]

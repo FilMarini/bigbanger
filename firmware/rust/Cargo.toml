@@ -1,0 +1,65 @@
+[package]
+name    = "bigbanger"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[[bin]]
+name = "bigbanger"
+path = "./src/main.rs"
+
+[dependencies]
+log = "0.4.27"
+embassy-executor = "0.9.0"
+embassy-futures = "0.1"
+embassy-sync = "0.7"
+embassy-time = "0.5.0"
+static_cell = "2.1.1"
+loadcell = "0.3.0"
+embedded-hal = "1.0.0"
+aligned = "0.4.2"
+crc = "3.3.0"
+embedded-storage = "0.3.1"
+esp-bootloader-esp-idf = "0.3.0"
+esp-hal = { version = "=1.0.0-rc.1", features = [
+  "log-04",
+  "unstable",
+] }
+esp-backtrace = { version = "0.18.0", features = [
+  "panic-handler",
+  "println",
+] }
+esp-storage = "0.8.0"
+esp-println = { version = "0.16.0", features = ["log-04"] }
+esp-rtos = { version = "0.1.1", features = ["esp-radio", "embassy", "log-04"] }
+esp-radio = { version = "0.16.0", features = [
+  "ble",
+  "log-04",
+  "unstable",
+] }
+esp-alloc = "0.9.0"
+trouble-host = { version = "0.5.0", features = [
+    "default-packet-pool-mtu-255",
+    "derive",
+    "scan",
+] }
+
+[features]
+default = ["esp32c3"]
+esp32c3 = [
+    "esp-backtrace/esp32c3",
+    "esp-bootloader-esp-idf/esp32c3",
+    "esp-hal/esp32c3",
+    "esp-rtos/esp32c3",
+    "esp-radio/esp32c3",
+    "esp-storage/esp32c3",
+]
+
+[profile.release]
+debug            = true
+debug-assertions = true
+lto              = "fat"
+codegen-units    = 1
+
+[package.metadata.cargo-machete]
+ignored = ["embassy-sync"]
