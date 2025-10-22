@@ -6,6 +6,8 @@
 
 BigBanger is an ESP32-based open-source project that combines firmware and hardware to create a Bluetooth-enabled scale, mainly designed for climbing training.
 
+The firmware can be chosen between *micropython*, easy to read and customize, but poorer power consumption, or *rust*, where it gets a bit more complicated but improves the efficiency.
+
 This scale is fully compatible with the [Tindeq Progressor API](https://tindeq.com/progressor_api/), enabling easy integration with apps that support them, including the official Tindeq Progressor app.
 
 The BigBanger board is designed to exploit the housing of cheap scales that you can buy on Amazon/Aliexpress.
@@ -19,11 +21,15 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 ## Repository structure
 
-* **firmware**: contains the micropython firmware for the ESP32
+* **firmware**:
+  * *upython* contains the micropython firmware for the ESP32-C3
+  * *rust* contains the rust firmware for the ESP32-C3
 
 * **hardware**: contains the Kicad project for the PCB
 
 ## Prerequisite
+
+### Micropython version
 
 * Python 3.7 or newer
 
@@ -31,7 +37,11 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 * [rshell](https://github.com/dhylands/rshell)
 
-## How-to
+### Rust version
+
+* Rust toolchain installation compatible with ESP32-C3. Please follow the steps outlined [here](https://docs.espressif.com/projects/rust/book/getting-started/toolchain.html)
+
+## How-to Hardware
 
 1. Build the PCB from the Kicad project. Design is fully compliant with [JLCPCB rules](https://jlcpcb.com/capabilities/pcb-capabilities)
 
@@ -59,10 +69,13 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
     * Device should appear as `/dev/ttyACM*` or `/dev/ttyUSB*`
 
+## How-to Firmware
 
-6. Flash the ESP32 micropython firmware. Instructions and firmware files are [here](https://micropython.org/download/ESP32_GENERIC_C3/)
+### Micropython
 
-7. Copy the `.py` files in the 'firmware' folder into the ESP32. Copy the `hx711_gpio.py` file into the ESP32. For this you can use [rshell](https://github.com/dhylands/rshell)
+1. Flash the ESP32-C3 micropython firmware. Instructions and firmware files are [here](https://micropython.org/download/ESP32_GENERIC_C3/)
+
+2. Copy the `.py` files in the 'firmware/upython' folder into the ESP32. Copy the `hx711/hx711_gpio.py` file into the ESP32. For this you can use [rshell](https://github.com/dhylands/rshell)
 
    * Modify the `main.py` file. You need to specify the Bluetooth name for your device (If you want it compatible with the Tindeq Progressor, name must start with `Progressor`) as well as the crane scale used (Supported values are `WH-C07` and `WH-C100`)
 
@@ -76,7 +89,28 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
     
 
-9. Start training!
+3. Start training!
+
+### Rust
+
+1. Install the rust toolchain for ESP32-C3. Please follow the [guide](https://docs.espressif.com/projects/rust/book/getting-started/toolchain.html)
+
+1. If you want to modify the Bluetooth advertisement name, change it in [firmware/rust/.cargo/config.toml](https://github.com/FilMarini/bigbanger/blob/rust/firmware/rust/.cargo/config.toml#L26) under `PROGRESSOR_NAME`. Bear in mind that the advertised name must start with `Progressor_` in order to be recognized from the Tindeq App.
+
+2. Once the toolchain is set up, go into the Rust firmware directory and build in release mode:
+
+   ```bash
+   cd firmware/rust
+   cargo build --release
+   ```
+   
+4. With the BigBanger connected, flash the firmware:
+
+   ```bash
+   cargo run --release
+   ```
+   
+6. Start training!
 
 ## Calibration
 
@@ -99,3 +133,5 @@ The BigBanger scale comes pre-calibrated, but if for any reason the calibration 
 ## Acknowledgements
 
 Huge thanks to [Tindeq](https://tindeq.com/product/progressor/) for improving climbing training for all of us with their innovative product and for making their API available to third-party developers, enabling projects like this one. If you find this useful, consider supporting them by getting one of their products—they’re well worth it!
+
+Special thanks also to [kesyog](https://github.com/kesyog) for their excellent open-source project [hangman](https://github.com/kesyog/hangman), which provided valuable guidance and inspiration for the Rust firmware implementation. Since I started with zero Rust knowledge, having a working example to learn from was incredibly helpful — some parts of the code resemble the original hangman implementation.
