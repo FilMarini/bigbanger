@@ -23,7 +23,7 @@ rustflags = [
 [env]
 ESP_LOG = "info"
 # Progressor advertise name
-PROGRESSOR_NAME = "Progressor_1"
+PROGRESSOR_NAME = "Progressor_BB"
 # App version
 APP_VERSION = "1.2.3"
 # Device ID
