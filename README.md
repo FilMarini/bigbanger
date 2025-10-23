@@ -6,7 +6,7 @@
 
 BigBanger is an ESP32-based open-source project that combines firmware and hardware to create a Bluetooth-enabled scale, mainly designed for climbing training.
 
-The firmware can be chosen between *micropython*, easy to read and customize, but poorer power consumption, or *rust*, where it gets a bit more complicated but improves the efficiency.
+The firmware can be chosen between *microPython*, easy to read and customize, but poorer power consumption, or *Rust*, where it gets a bit more complicated but improves the efficiency.
 
 This scale is fully compatible with the [Tindeq Progressor API](https://tindeq.com/progressor_api/), enabling easy integration with apps that support them, including the official Tindeq Progressor app.
 
@@ -22,8 +22,8 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 ## Repository structure
 
 * **firmware**:
-  * *upython* contains the micropython firmware for the ESP32-C3
-  * *rust* contains the rust firmware for the ESP32-C3
+  * *upython* contains the microPython firmware for the ESP32-C3
+  * *rust* contains the Rust firmware for the ESP32-C3
 
 * **hardware**: contains the Kicad project for the PCB
 
@@ -73,7 +73,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 ### Micropython
 
-1. Flash the ESP32-C3 micropython firmware. Instructions and firmware files are [here](https://micropython.org/download/ESP32_GENERIC_C3/)
+1. Flash the ESP32-C3 microPython firmware. Instructions and firmware files are [here](https://micropython.org/download/ESP32_GENERIC_C3/)
 
 2. Copy the `.py` files in the `firmware/upython` folder as well as `hx711/hx711_gpio.py` file into the ESP32. For this you can use [rshell](https://github.com/dhylands/rshell)
 
@@ -93,7 +93,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 ### Rust
 
-1. Install the rust toolchain for ESP32-C3. Please follow the [guide](https://docs.espressif.com/projects/rust/book/getting-started/toolchain.html)
+1. Install the Rust toolchain for ESP32-C3. Please follow the [guide](https://docs.espressif.com/projects/rust/book/getting-started/toolchain.html)
 
 1. If you want to modify the Bluetooth advertisement name, change it in [firmware/rust/.cargo/config.toml](https://github.com/FilMarini/bigbanger/blob/rust/firmware/rust/.cargo/config.toml#L26) under `PROGRESSOR_NAME`. Bear in mind that the advertised name must start with `Progressor_` in order to be recognized from the Tindeq App.
 
