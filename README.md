@@ -29,7 +29,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 ## Prerequisite
 
-### Micropython version
+### Micropython
 
 * Python 3.7 or newer
 
@@ -37,7 +37,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 * [rshell](https://github.com/dhylands/rshell)
 
-### Rust version
+### Rust
 
 * Rust toolchain installation compatible with ESP32-C3. Please follow the steps outlined [here](https://docs.espressif.com/projects/rust/book/getting-started/toolchain.html)
 
@@ -75,7 +75,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
 
 1. Flash the ESP32-C3 micropython firmware. Instructions and firmware files are [here](https://micropython.org/download/ESP32_GENERIC_C3/)
 
-2. Copy the `.py` files in the 'firmware/upython' folder into the ESP32. Copy the `hx711/hx711_gpio.py` file into the ESP32. For this you can use [rshell](https://github.com/dhylands/rshell)
+2. Copy the `.py` files in the `firmware/upython` folder as well as `hx711/hx711_gpio.py` file into the ESP32. For this you can use [rshell](https://github.com/dhylands/rshell)
 
    * Modify the `main.py` file. You need to specify the Bluetooth name for your device (If you want it compatible with the Tindeq Progressor, name must start with `Progressor`) as well as the crane scale used (Supported values are `WH-C07` and `WH-C100`)
 
