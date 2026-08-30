@@ -1,3 +1,5 @@
+
+
 # BigBanger :boom:
 
 <p align="center">
@@ -83,7 +85,7 @@ This is not the first open-source Tindeq Progressor-like project. The [hangman](
     
        ```bash
        git clone --recursive https://github.com/FilMarini/bigbanger.git
-       cd bigbanger/firmware
+       cd bigbanger/firmware/upython
        rshell -p /dev/tty<your device> cp bb_gatt_server.py ble_advertising.py config.py hx711_bb.py utils.py hx711/hx711_gpio.py main.py /pyboard # Probably requires sudo privileges
        ```
 
